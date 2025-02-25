@@ -6,6 +6,14 @@ variable "deployment_name" {
   default     = "sandpit"
 }
 
+// enable & disable modules
+
+variable "deploy_platform_k8s_eks" {
+  description = "deploy k8s aws eks"
+  type        = bool
+  default     = false
+}
+
 // amazon web services (aws) variables
 
 variable "aws_region" {

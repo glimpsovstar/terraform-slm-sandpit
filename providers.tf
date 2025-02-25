@@ -1,4 +1,11 @@
 terraform {
+  # cloud {
+  #   organization = "tphan"
+  #   workspaces {
+  #     name = "terraform-slm-sandpit"
+  #     project = "sandpits"
+  #   }
+  # }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
