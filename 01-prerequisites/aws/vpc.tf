@@ -19,16 +19,13 @@ module "vpc" {
   map_public_ip_on_launch = true
 
   tags = {
-    "kubernetes.io/cluster/${var.deployment_id}" = "shared"
   }
 
   public_subnet_tags = {
-    "kubernetes.io/cluster/${var.deployment_id}" = "shared"
-    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/role/elb"          = "1"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/cluster/${var.deployment_id}" = "shared"
-    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/role/internal-elb" = "1"
   }
 }
