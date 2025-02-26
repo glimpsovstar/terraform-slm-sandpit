@@ -9,6 +9,12 @@ module "eks" {
 
   cluster_endpoint_public_access  = true
   enable_cluster_creator_admin_permissions = true
+
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
+  }
   
   eks_managed_node_group_defaults = { 
   }
@@ -22,6 +28,23 @@ module "eks" {
       instance_types         = var.worker_instance_types
       capacity_type          = var.worker_capacity_type
       key_name               = var.deployment_id
+
+      # extend default 20 gb volume size to 50 gb
+      block_device_mappings = [
+        {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size = 50
+            volume_type = "gp3"
+            delete_on_termination = true
+          }
+        }
+      ]
+
+      # required for aws-ebs-csi-driver
+      iam_role_additional_policies = {
+        AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      }
     }
   }
 }
@@ -37,7 +60,7 @@ resource "null_resource" "kubeconfig" {
   ]
 }
 
-resource "aws_ec2_tag" "eks_deployment_id" {
+resource "aws_ec2_tag" "eks_cluster_name" {
   for_each = toset(data.aws_subnets.all.ids)
 
   resource_id = each.value
