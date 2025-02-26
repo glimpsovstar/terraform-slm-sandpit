@@ -1,14 +1,14 @@
 variable "region" {
-  description = "AWS region"
+  description = "aws region"
   type        = string
 }
 
 variable "deployment_id" {
-  description = "Deployment id"
+  description = "deployment identifier"
   type        = string
 }
 
 variable "vpc_cidr" {
-  description = "VPC CIDR"
+  description = "vpc cidr"
   type        = string
 }
