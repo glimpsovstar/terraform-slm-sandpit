@@ -1,5 +1,5 @@
 variable "deployment_id" {
-  description = "deployment id"
+  description = "deployment identifier"
   type        = string
 }
 
