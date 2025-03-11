@@ -1,6 +1,6 @@
 data "kubernetes_service" "vault-ui" {
   metadata {
-    name = "vault-ent-server-ui"
+    name = "vault-ui"
     namespace = "vault"
   }
   
@@ -42,5 +42,18 @@ resource "kubernetes_secret" "ent-license" {
 
   data = {
     license = var.ent_license
+  }
+}
+
+resource "kubernetes_secret" "tls" {
+  metadata {
+    name      = "vault-tls-certificates"
+    namespace = "vault"
+  }
+
+  data = {
+    "vault.ca"  = tls_self_signed_cert.ca-cert.cert_pem
+    "vault.crt" = tls_locally_signed_cert.server-signed-cert.cert_pem
+    "vault.key" = nonsensitive(tls_private_key.server-key.private_key_pem)
   }
 }

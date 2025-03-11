@@ -8,7 +8,7 @@ resource "local_file" "vault-ent-server-helm-values" {
 
 # vault enterprise server
 resource "helm_release" "vault-ent-server" {
-  name          = "vault-ent-server"
+  name          = "vault"
   chart         = "vault"
   repository    = "https://helm.releases.hashicorp.com"
   version       = var.helm_chart_version

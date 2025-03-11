@@ -1,4 +1,4 @@
-// generic variables
+# generic variables
 
 variable "deployment_name" {
   description = "deployment name to prefix resources"
@@ -6,7 +6,7 @@ variable "deployment_name" {
   default     = "sandpit"
 }
 
-// enable & disable modules
+# enable & disable modules
 
 variable "deploy_platform_k8s_eks" {
   description = "deploy k8s aws eks"
@@ -14,7 +14,13 @@ variable "deploy_platform_k8s_eks" {
   default     = false
 }
 
-// amazon web services (aws) variables
+variable "deploy_solution_k8s_vault" {
+  description = "deploy k8s vault"
+  type        = bool
+  default     = false
+}
+
+# amazon web services (aws) variables
 
 variable "aws_region" {
   description = "aws region"
@@ -31,4 +37,11 @@ variable "aws_vpc_cidr" {
   description = "aws vpc cidr"
   type        = string
   default     = "10.200.0.0/16"
+}
+
+# hashicorp vault enterprise server variables
+
+variable "vault_ent_license" {
+  description = "vault enterprise license"
+  type        = string
 }
