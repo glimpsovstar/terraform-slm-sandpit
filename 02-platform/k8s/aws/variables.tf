@@ -14,6 +14,11 @@ variable "cluster_version" {
   type        = string
 }
 
+variable "cluster_suffix" {
+  description = "eks cluster name suffix"
+  type        = string
+}
+
 variable "worker_desired_capacity" {
   description = "eks worker nodes desired capacity"
   type        = number

@@ -1,8 +1,36 @@
+data "aws_vpc" "this" {
+  filter {
+    name   = "tag:Name"
+    values = ["${var.deployment_id}*"]
+  }
+}
+
+data "aws_subnets" "all" {
+  filter {
+    name   = "tag:Name"
+    values = ["*${var.deployment_id}*"]
+  }
+}
+
+data "aws_subnets" "private" {
+  filter {
+    name   = "tag:Name"
+    values = ["*${var.deployment_id}-private*"]
+  }
+}
+
+data "aws_security_group" "vault" {
+  filter {
+    name   = "tag:Name"
+    values = ["*${var.deployment_id}-vault"]
+  }
+}
+
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "~> 20.0"
 
-  cluster_name                    = "${var.deployment_id}-platform"
+  cluster_name                    = "${var.deployment_id}-${var.cluster_suffix}"
   cluster_version                 = var.cluster_version
   vpc_id                          = data.aws_vpc.this.id
   subnet_ids                      = data.aws_subnets.private.ids
@@ -28,6 +56,7 @@ module "eks" {
       instance_types         = var.worker_instance_types
       capacity_type          = var.worker_capacity_type
       key_name               = var.deployment_id
+      vpc_security_group_ids = [data.aws_security_group.vault.id]
 
       # extend default 20 gb volume size to 50 gb
       block_device_mappings = [
