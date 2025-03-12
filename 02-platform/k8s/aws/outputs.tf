@@ -14,7 +14,6 @@ output "cluster_ca_certificate" {
 }
 
 output "cluster_oidc_issuer_url" {
-  description = "eks cluster oidc issuer"
+  description = "eks cluster oidc issuer url"
   value       = module.eks.cluster_oidc_issuer_url
-  
 }
