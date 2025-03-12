@@ -38,6 +38,18 @@ module "eks" {
   cluster_endpoint_public_access  = true
   enable_cluster_creator_admin_permissions = true
 
+  cluster_security_group_additional_rules = {
+    // allow consul to communicate with the cluster api.
+    ingress_cluster_api_tcp = {
+      description                = "vpc-cluster-api-https-tcp"
+      protocol                   = "tcp"
+      from_port                  = 443
+      to_port                    = 443
+      type                       = "ingress"
+      cidr_blocks                = [data.aws_vpc.this.cidr_block]
+    }
+  }
+
   cluster_addons = {
     aws-ebs-csi-driver = {
       most_recent = true
