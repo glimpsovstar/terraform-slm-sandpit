@@ -10,7 +10,8 @@ server:
     secretKey: "license"
   image:
     repository: "hashicorp/vault-enterprise"
-    tag: "${version}"
+    tag: "${version}-ent"
+  logLevel: "debug"
   extraEnvironmentVars:
     VAULT_CACERT: /vault/userconfig/vault-ha-tls/vault.ca
   volumes:

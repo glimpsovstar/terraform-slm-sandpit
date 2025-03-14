@@ -26,10 +26,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-# data "aws_eks_cluster" "platform" {
-#   name = var.deploy_platform_k8s_eks == true ? module.platform-k8s-eks[0].cluster_name : null 
-# }
-
 data "aws_eks_cluster" "platform" {
   count = var.deploy_platform_k8s_eks ? 1 : 0
 
