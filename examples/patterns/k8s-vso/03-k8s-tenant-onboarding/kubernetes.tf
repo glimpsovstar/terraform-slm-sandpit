@@ -12,12 +12,12 @@ resource "kubernetes_service_account" "vso-auth" {
   }
 }
 
-resource "local_file" "static-secrets" {
-  content = templatefile("${path.module}/templates/static-secrets.yml.tpl", {
+resource "local_file" "global-auth-static-secrets" {
+  content = templatefile("${path.module}/templates/global-auth-static-secrets.yml.tpl", {
     vault_path  = "sample1"
     tenant_name = var.tenant_name
     })
-  filename = "${path.module}/static-secrets.yml.tmp"
+  filename = "${path.module}/global-auth-static-secrets.yml.tmp"
 }
 
 # retreive all yaml files in the specified directory
@@ -41,4 +41,3 @@ resource "kubernetes_manifest" "resources" {
 
   manifest = each.value
 }
-

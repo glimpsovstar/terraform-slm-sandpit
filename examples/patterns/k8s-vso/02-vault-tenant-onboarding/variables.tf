@@ -12,3 +12,8 @@ variable "kubernetes_ca_certificate" {
   description = "kubernetes ca certificate"
   type        = string
 }
+
+variable "kubernetes_oidc_discovery_url" {
+  description = "oidc discovery url"
+  type        = string
+}

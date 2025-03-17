@@ -22,3 +22,35 @@ resource "vault_kubernetes_auth_backend_config" "this" {
 
   namespace              = vault_namespace.tenant.path
 }
+
+// jwt authentication
+# allows oidc discovery urls to not require authentication
+resource "kubernetes_cluster_role_binding" "oidc_discovery_anonymous" {
+  metadata {
+    name = "oidc-discovery-anonymous"
+  }
+  role_ref {
+    kind      = "ClusterRole"
+    name      = "system:service-account-issuer-discovery"
+    api_group = "rbac.authorization.k8s.io"
+  }
+  subject {
+    kind      = "Group"
+    name      = "system:unauthenticated"
+    api_group = "rbac.authorization.k8s.io"
+  }
+}
+
+# create jwt auth backend
+resource "vault_jwt_auth_backend" "jwt" {
+  path                  = "jwt"
+  oidc_discovery_url    = var.kubernetes_oidc_discovery_url
+  # oidc_discovery_ca_pem = base64decode(var.kubernetes_ca_certificate)
+  bound_issuer          = var.kubernetes_oidc_discovery_url
+
+  namespace             = vault_namespace.tenant.path
+
+  depends_on = [ 
+    kubernetes_cluster_role_binding.oidc_discovery_anonymous 
+  ]
+}

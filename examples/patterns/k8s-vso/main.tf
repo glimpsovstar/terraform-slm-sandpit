@@ -47,9 +47,10 @@ module "vault-ent-tenant" {
     kubernetes = kubernetes.tenant-eks
   }
 
-  tenant_name               = var.tenant_name
-  kubernetes_api_endpoint   = module.tenant-k8s-eks.cluster_api_endpoint
-  kubernetes_ca_certificate = module.tenant-k8s-eks.cluster_ca_certificate
+  tenant_name                   = var.tenant_name
+  kubernetes_api_endpoint       = module.tenant-k8s-eks.cluster_api_endpoint
+  kubernetes_ca_certificate     = module.tenant-k8s-eks.cluster_ca_certificate
+  kubernetes_oidc_discovery_url = module.tenant-k8s-eks.cluster_oidc_issuer_url
 
   depends_on = [ 
     module.vault-secrets-operator 
