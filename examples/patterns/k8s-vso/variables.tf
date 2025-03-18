@@ -8,3 +8,9 @@ variable "vault_token" {
   type        = string
   sensitive   = true
 }
+
+variable "kubernetes_vso_service_account_name" {
+  description = "kubernetes vso service account name"
+  type        = string
+  default     = "vso-auth"
+}

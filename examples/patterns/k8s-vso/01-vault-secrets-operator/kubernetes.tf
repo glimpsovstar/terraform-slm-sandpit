@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "vault" {
 # kube service account for vso-auth
 resource "kubernetes_service_account" "vso-auth" {
   metadata {
-    name = "vso-auth"
+    name = var.kubernetes_vso_service_account_name
     namespace = "vault"
   }
 }
@@ -24,7 +24,7 @@ resource "kubernetes_cluster_role_binding" "vso-auth" {
   }
   subject {
     kind = "ServiceAccount"
-    name = "vso-auth"
+    name = var.kubernetes_vso_service_account_name
     namespace = "vault"
   }
 }
@@ -35,7 +35,7 @@ resource "kubernetes_secret" "vso-auth" {
     name      = "vso-auth"
     namespace = "vault"
     annotations = {
-      "kubernetes.io/service-account.name" = "vso-auth"
+      "kubernetes.io/service-account.name" = var.kubernetes_vso_service_account_name
     }
   }
   type = "kubernetes.io/service-account-token"

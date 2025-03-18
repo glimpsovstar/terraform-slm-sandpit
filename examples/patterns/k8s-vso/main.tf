@@ -29,9 +29,10 @@ module "vault-secrets-operator" {
     kubernetes = kubernetes.tenant-eks
   }
 
-  tenant_name        = var.tenant_name
-  vault_address      = data.terraform_remote_state.tcm.outputs.vault_ui_fqdn
-  helm_chart_version = "0.10.0"
+  tenant_name                         = var.tenant_name
+  vault_address                       = data.terraform_remote_state.tcm.outputs.vault_ui_fqdn
+  helm_chart_version                  = "0.10.0"
+  kubernetes_vso_service_account_name = var.kubernetes_vso_service_account_name
 
   depends_on = [ 
     module.tenant-k8s-eks
@@ -47,10 +48,11 @@ module "vault-ent-tenant" {
     kubernetes = kubernetes.tenant-eks
   }
 
-  tenant_name                   = var.tenant_name
-  kubernetes_api_endpoint       = module.tenant-k8s-eks.cluster_api_endpoint
-  kubernetes_ca_certificate     = module.tenant-k8s-eks.cluster_ca_certificate
-  kubernetes_oidc_discovery_url = module.tenant-k8s-eks.cluster_oidc_issuer_url
+  tenant_name                         = var.tenant_name
+  kubernetes_api_endpoint             = module.tenant-k8s-eks.cluster_api_endpoint
+  kubernetes_ca_certificate           = module.tenant-k8s-eks.cluster_ca_certificate
+  kubernetes_oidc_discovery_url       = module.tenant-k8s-eks.cluster_oidc_issuer_url
+  kubernetes_vso_service_account_name = var.kubernetes_vso_service_account_name
 
   depends_on = [ 
     module.vault-secrets-operator 
@@ -66,7 +68,8 @@ module "k8s-tenant-onboarding" {
     kubernetes = kubernetes.tenant-eks
   }
 
-  tenant_name = var.tenant_name
+  tenant_name                         = var.tenant_name
+  kubernetes_vso_service_account_name = var.kubernetes_vso_service_account_name
 
   depends_on = [ 
     module.vault-secrets-operator 

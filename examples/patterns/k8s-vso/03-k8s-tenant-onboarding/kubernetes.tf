@@ -4,10 +4,10 @@ resource "kubernetes_namespace" "tenant" {
   }
 }
 
-# kube service account for vso-auth
+# kubernetes service account
 resource "kubernetes_service_account" "vso-auth" {
   metadata {
-    name = "vso-auth"
+    name = var.kubernetes_vso_service_account_name
     namespace = var.tenant_name
   }
 }

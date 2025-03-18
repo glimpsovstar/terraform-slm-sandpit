@@ -8,7 +8,7 @@ resource "vault_auth_backend" "kubernetes" {
 # retreive token_reviewer_jwt for vault kubernetes auth backend config
 data "kubernetes_secret" "vso-auth" {
   metadata {
-    name = "vso-auth"
+    name = var.kubernetes_vso_service_account_name
     namespace = "vault"
   }
 }
