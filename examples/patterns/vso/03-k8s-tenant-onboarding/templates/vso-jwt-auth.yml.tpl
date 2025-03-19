@@ -1,7 +1,7 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
-  namespace: tenant3
+  namespace: tenant1
   name: vso-jwt-auth
 spec:
   namespace: tenanta
