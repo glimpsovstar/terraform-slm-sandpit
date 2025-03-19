@@ -41,7 +41,7 @@ module "vault-secrets-operator" {
 
 # vault tenant configuration
 
-module "vault-ent-tenant" {
+module "vault-ent-tenant-onboarding" {
   source = "./02-vault-tenant-onboarding"
 
   providers = {
