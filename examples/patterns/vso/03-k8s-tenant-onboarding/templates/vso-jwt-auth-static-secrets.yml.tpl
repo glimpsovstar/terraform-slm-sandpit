@@ -2,14 +2,14 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
   name: vault-kv
-  namespace: tenant3
+  namespace: ${tenant_name}
 spec:
   type: kv-v2
   mount: secrets
-  path: sample1
-  namespace: tenanta
+  path: ${vault_path}
+  namespace: ${tenant_name}
   destination:
-    name: sample1
+    name: ${vault_path}
     create: true
   refreshAfter: 30s
-  vaultAuthRef: vso-jwt-auth
+  vaultAuthRef: vso-auth

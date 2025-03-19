@@ -1,12 +1,12 @@
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultAuth
 metadata:
-  namespace: tenant1
-  name: vso-jwt-auth
+  namespace: ${tenant_name}
+  name: vso-auth
 spec:
-  namespace: tenanta
+  namespace: ${tenant_name}
   method: jwt
   mount: jwt
   jwt:
-    role: tenanta
-    serviceAccount: vso-jwt-auth
+    role: ${tenant_name}
+    serviceAccount: vso-auth
