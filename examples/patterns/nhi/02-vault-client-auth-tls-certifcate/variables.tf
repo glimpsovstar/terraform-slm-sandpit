@@ -3,6 +3,11 @@ variable "pki_mount_path" {
   type        = string
 }
 
+variable "client_auth_mount_path" {
+  description = "client authentication mount path"
+  type        = string
+}
+
 variable "common_name" {
   description = "common name"
   type        = string
