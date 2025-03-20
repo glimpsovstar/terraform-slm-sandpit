@@ -3,8 +3,13 @@ variable "pki_mount_path" {
   type        = string
 }
 
-variable "client_auth_mount_path" {
-  description = "client authentication mount path"
+variable "machine_auth_mount_path" {
+  description = "machine authentication mount path"
+  type        = string
+}
+
+variable "machine_auth_policy" {
+  description = "machine authentication policy"
   type        = string
 }
 
