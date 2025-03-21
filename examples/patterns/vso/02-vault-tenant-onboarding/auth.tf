@@ -45,7 +45,6 @@ resource "kubernetes_cluster_role_binding" "oidc_discovery_anonymous" {
 resource "vault_jwt_auth_backend" "jwt" {
   path                  = "jwt"
   oidc_discovery_url    = var.kubernetes_oidc_discovery_url
-  # oidc_discovery_ca_pem = base64decode(var.kubernetes_ca_certificate)
   bound_issuer          = var.kubernetes_oidc_discovery_url
 
   namespace             = vault_namespace.tenant.path
