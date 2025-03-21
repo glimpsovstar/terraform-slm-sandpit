@@ -1,3 +1,4 @@
+# creates tls certificate auth role for signed machine identity certificate
 resource "vault_cert_auth_backend_role" "machine-auth" {
     name           = var.common_name
     certificate    = vault_pki_secret_backend_cert.machine-id.certificate
