@@ -45,8 +45,8 @@ module "solution-k8s-vault-ent" {
   count = var.deploy_solution_k8s_vault ? 1 : 0
 
   deployment_id          = local.deployment_id
-  vault_version          = "1.19.0"
+  vault_version          = "1.19.1"
   ent_license            = var.vault_ent_license
-  helm_chart_version     = "0.29.1"
+  helm_chart_version     = "0.30.0"
   route53_sandbox_prefix = var.aws_route53_sandbox_prefix
 }
