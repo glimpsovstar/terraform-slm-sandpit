@@ -1,8 +1,8 @@
-data "aws_ami" "ubuntu20" {
+data "aws_ami" "ubuntu2404" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
   }
 
   filter {
@@ -19,7 +19,7 @@ data "aws_ami" "ubuntu20" {
 }
 
 resource "aws_instance" "bastion" {
-  ami             = data.aws_ami.ubuntu20.id
+  ami             = data.aws_ami.ubuntu2404.id
   instance_type   = "t2.micro"
   key_name        = module.key_pair.key_pair_name
   subnet_id       = element(module.vpc.public_subnets, 1)
