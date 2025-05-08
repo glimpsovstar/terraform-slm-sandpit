@@ -1,3 +1,14 @@
+data "kubernetes_service" "minio" {
+  metadata {
+    name = "minio"
+    namespace = "minio"
+  }
+  
+  depends_on = [
+    helm_release.minio
+  ]
+}
+
 data "kubernetes_service" "minio-console" {
   metadata {
     name = "minio-console"

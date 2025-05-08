@@ -3,6 +3,16 @@ data "aws_route53_zone" "hashidemos" {
   private_zone = false
 }
 
+resource "aws_route53_record" "minio" {
+  zone_id = data.aws_route53_zone.hashidemos.zone_id
+  name    = "minio"
+  type    = "CNAME"
+  ttl     = 300
+  records = [
+    data.kubernetes_service.minio.status.0.load_balancer.0.ingress.0.hostname
+]
+}
+
 resource "aws_route53_record" "minio-console" {
   zone_id = data.aws_route53_zone.hashidemos.zone_id
   name    = "minio-console"
