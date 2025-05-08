@@ -1,17 +1,15 @@
-# create tls certificate auth backend
+# create tls certificate auth method for machine authentication
 resource "vault_auth_backend" "machine-auth" {
   type = "cert"
 }
 
-// create userpass auth backend for oidc testing
-
+# create userpass auth method for oidc human authentication
 resource "vault_auth_backend" "userpass" {
   path       = "userpass"
   type       = "userpass"
 }
 
-// create userpass user for oidc testing
-
+# create test user resources for oidc human authentication
 resource "vault_generic_endpoint" "testuser1" {
   path                 = "auth/userpass/users/testuser1"
   ignore_absent_fields = true

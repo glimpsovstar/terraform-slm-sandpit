@@ -1,4 +1,5 @@
 
+# create minio oidc resources
 resource "vault_identity_oidc_assignment" "minio" {
   name       = "minio"
   entity_ids = [
@@ -59,3 +60,18 @@ resource "vault_identity_oidc_scope" "policies" {
   template    = "{\"minio\": \"consoleAdmin\"}"
 }
 
+# create testing identity token resources
+resource "vault_identity_oidc_key" "testing" {
+  name      = "testing"
+  allowed_client_ids = ["*"]
+  algorithm = "RS256"
+  verification_ttl = 7200
+  rotation_period = 7200
+}
+
+resource "vault_identity_oidc_role" "testing" {
+  name = "testing"
+  key  = vault_identity_oidc_key.testing.name
+  template = "{\"username\": {{identity.entity.name}}, \"contact\": { \"email\": {{identity.entity.metadata.email}} } }"
+  ttl = 60
+}
