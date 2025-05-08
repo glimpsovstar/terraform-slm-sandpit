@@ -14,7 +14,7 @@ variable "aws_region" {
 
 variable "vault_version" {
   type    = string
-  default = "1.19.0"
+  default = "1.19.1"
 }
 
 data "amazon-ami" "ubuntu2404" {
@@ -55,6 +55,7 @@ build {
   # install vault
   provisioner "shell" {
     inline = [
+      "sudo apt install unzip -y",
       "chmod +x /tmp/install_vault_ent.sh",
       "/tmp/install_vault_ent.sh ${var.vault_version}"
     ]

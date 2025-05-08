@@ -12,14 +12,14 @@ module "vault-platform-onboarding" {
   minio_console_address = "minio-console.tphan.sbx.hashidemos.io"
 }
 
-# module "vm-test-app" {
-#   source = "./03-vm-test-app"
+module "vm-test-app" {
+  source = "./03-vm-test-app"
 
-#   deployment_id       = data.terraform_remote_state.tcm.outputs.deployment_id
-#   bastion_public_fqdn = data.terraform_remote_state.tcm.outputs.aws_bastion_public_fqdn
-#   vault_address       = data.terraform_remote_state.tcm.outputs.vault_ui_fqdn
-#   vault_version       = "1.19.0"
-# }
+  deployment_id       = data.terraform_remote_state.tcm.outputs.deployment_id
+  bastion_public_fqdn = data.terraform_remote_state.tcm.outputs.aws_bastion_public_fqdn
+  vault_address       = data.terraform_remote_state.tcm.outputs.vault_ui_fqdn
+  vault_version       = "1.19.1"
+}
 
 # minio
 module "k8s-minio" {
