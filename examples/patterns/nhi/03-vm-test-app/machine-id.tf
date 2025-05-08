@@ -9,13 +9,13 @@ module "vault-machine-id-onboarding" {
 }
 
 resource "local_sensitive_file" "machine_id_certificate" {
-  filename = "${path.module}/${aws_instance.test-app.id}.pem"
+  filename = "${path.module}/configs/${aws_instance.test-app.id}.pem"
   file_permission = "400"
   content = module.vault-machine-id-onboarding.public_cert_pem
 }
 
 resource "local_sensitive_file" "machine_id_private_key" {
-  filename = "${path.module}/${aws_instance.test-app.id}.key"
+  filename = "${path.module}/configs/${aws_instance.test-app.id}.key"
   file_permission = "400"
   content = module.vault-machine-id-onboarding.private_key_pem
 }
