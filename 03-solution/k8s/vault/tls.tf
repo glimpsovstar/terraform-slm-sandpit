@@ -63,7 +63,7 @@ resource "tls_locally_signed_cert" "server-signed-cert" {
     "server_auth",
   ]
 
-  validity_period_hours = 720 # 30-days
+  validity_period_hours = 2160 # 90-days
 }
 
 resource "local_file" "ca-cert" {
