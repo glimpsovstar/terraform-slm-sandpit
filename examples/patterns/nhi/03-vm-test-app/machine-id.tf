@@ -8,6 +8,12 @@ module "vault-machine-id-onboarding" {
   common_name             = aws_instance.test-app.private_dns
 }
 
+resource "local_sensitive_file" "vault_ca_certificate" {
+  filename = "${path.module}/configs/ca-cert.pem"
+  file_permission = "400"
+  content = var.vault_ca_cert_pem
+}
+
 resource "local_sensitive_file" "machine_id_certificate" {
   filename = "${path.module}/configs/${aws_instance.test-app.id}.pem"
   file_permission = "400"

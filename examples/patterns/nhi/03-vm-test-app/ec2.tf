@@ -75,6 +75,7 @@ resource "terraform_data" "test-app" {
   provisioner "remote-exec" {
     inline = [
       "sudo unzip -d /var/tmp/vault-configs /var/tmp/vault-config-bundle.zip",
+      "sudo cp -f /var/tmp/vault-configs/ca-cert.pem /opt/vault/tls/ca-cert.pem",
       "sudo cp -f /var/tmp/vault-configs/i-*.pem /opt/vault/tls/client_tls.crt",
       "sudo cp -f /var/tmp/vault-configs/i-*.key /opt/vault/tls/client_tls.key",
       "sudo cp -f /var/tmp/vault-configs/agent-config.hcl.tmp /etc/vault.d/agent-config.hcl",

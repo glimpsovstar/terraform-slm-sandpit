@@ -12,6 +12,11 @@ variable "vault_address" {
   type = string
 }
 
+variable "vault_ca_cert_pem" {
+  type = string
+  sensitive = true
+}
+
 variable "vault_version" {
   type = string
 }

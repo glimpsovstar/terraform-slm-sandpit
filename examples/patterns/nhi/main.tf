@@ -18,6 +18,7 @@ module "vm-test-app" {
   deployment_id       = data.terraform_remote_state.tcm.outputs.deployment_id
   bastion_public_fqdn = data.terraform_remote_state.tcm.outputs.aws_bastion_public_fqdn
   vault_address       = data.terraform_remote_state.tcm.outputs.vault_ui_fqdn
+  vault_ca_cert_pem   = data.terraform_remote_state.tcm.outputs.vault_ca_cert_pem
   vault_version       = "1.19.1"
 }
 
