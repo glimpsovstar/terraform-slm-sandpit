@@ -16,6 +16,7 @@ auto_auth {
   method "cert" {
     config {
       name = "${role}"
+      ca_cert = "/opt/vault/tls/ca-cert.pem"
       client_cert = "/opt/vault/tls/client_tls.crt"
       client_key = "/opt/vault/tls/client_tls.key"
     }
@@ -28,10 +29,17 @@ auto_auth {
   }
 }
 
+api_proxy {
+  use_auto_auth_token = "force"
+  enforce_consistency = "always"
+}
+
+
 # cache {
 # }
 
 listener "tcp" {
-   address     = "127.0.0.1:8100"
-   tls_disable = true
+   address     = "127.0.0.1:8200"
+   tls_cert_file = "/opt/vault/tls/client_tls.crt"
+   tls_key_file  = "/opt/vault/tls/client_tls.key"
 }
