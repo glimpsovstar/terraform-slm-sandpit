@@ -5,5 +5,5 @@ resource "vault_cert_auth_backend_role" "machine-auth" {
     backend        = var.machine_auth_mount_path
     token_ttl      = 300
     token_max_ttl  = 600
-    token_policies = ["${var.machine_auth_policy}"]
+    token_policies = ["default", "${var.machine_auth_policy}"]
 }
