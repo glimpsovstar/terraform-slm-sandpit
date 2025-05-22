@@ -22,3 +22,13 @@ variable "pki_role" {
   description = "pki role"
   type        = string
 }
+
+variable "team_name" {
+  description = "team name"
+  type        = string
+}
+
+variable "machine_function" {
+  description = "machine function"
+  type        = string
+}
