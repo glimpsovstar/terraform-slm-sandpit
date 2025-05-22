@@ -51,3 +51,6 @@ kubeconfig*
 
 # Ignore temporary files
 *.tmp
+
+# Ignore key files
+*.key
