@@ -15,7 +15,7 @@ resource "vault_identity_entity" "machine-id" {
 }
 
 resource "vault_identity_entity_alias" "cert-auth" {
-  name            = "cert-auth"
+  name            = var.common_name
   mount_accessor  = data.vault_auth_backend.cert.accessor
   canonical_id    = vault_identity_entity.machine-id.id
 }
