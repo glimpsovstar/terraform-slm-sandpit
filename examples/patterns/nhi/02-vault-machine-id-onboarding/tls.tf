@@ -6,4 +6,8 @@ resource "vault_pki_secret_backend_cert" "machine-id" {
   ip_sans     = [
     "127.0.0.1"
   ]
+
+  uri_sans = [
+    local.spiffe_id
+  ]
 }
