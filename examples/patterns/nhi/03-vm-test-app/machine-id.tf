@@ -6,6 +6,8 @@ module "vault-machine-id-onboarding" {
   machine_auth_policy     = "trusted-machine"
   pki_role                = "trusted-machine"
   common_name             = aws_instance.test-app.private_dns
+  team_name               = "retailxyz"
+  machine_function        = "databasexyz"
 }
 
 resource "local_sensitive_file" "vault_ca_certificate" {

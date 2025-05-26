@@ -9,6 +9,7 @@ resource "vault_pki_secret_backend_role" "trusted-machine" {
    ext_key_usage      = ["ClientAuth"]
    allow_any_name     = true
    allow_subdomains   = false
+   allowed_uri_sans   = ["spiffe://*"]
    organization       = ["HashiCorp"]
    country            = ["AU"]
 }
