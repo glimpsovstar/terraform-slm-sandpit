@@ -52,12 +52,27 @@ build {
     destination = "/tmp/install_vault_ent.sh"
   }
 
+  provisioner "file" {
+    source      = "./scripts/setup_vault_agent_service.sh"
+    destination = "/tmp/setup_vault_agent_service.sh"
+  }
+
   # install vault
   provisioner "shell" {
     inline = [
       "sudo apt install unzip -y",
       "chmod +x /tmp/install_vault_ent.sh",
-      "/tmp/install_vault_ent.sh ${var.vault_version}"
+      "/tmp/install_vault_ent.sh ${var.vault_version}",
+      "chmod +x /tmp/setup_vault_agent_service.sh",
+      "/tmp/setup_vault_agent_service.sh"
+    ]
+  }
+
+  # setup vault agent
+  provisioner "shell" {
+    inline = [
+      "chmod +x /tmp/setup_vault_agent_service.sh",
+      "/tmp/setup_vault_agent_service.sh"
     ]
   }
 }
