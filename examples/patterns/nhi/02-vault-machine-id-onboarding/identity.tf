@@ -39,6 +39,6 @@ resource "vault_identity_oidc_key" "machine-id" {
 resource "vault_identity_oidc_role" "machine-id" {
   name = var.common_name
   key  = vault_identity_oidc_key.machine-id.name
-  template = "{\"spiffe_id\": ${local.spiffe_id} }"
+  template = "{\"spiffe_id\": \"${local.spiffe_id}\" }"
   ttl = 60
 }
