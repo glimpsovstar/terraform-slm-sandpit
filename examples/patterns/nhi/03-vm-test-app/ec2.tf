@@ -10,6 +10,13 @@ resource "local_file" "agent-config" {
   filename = "${path.module}/configs/agent-config.hcl.tmp"
 }
 
+resource "local_file" "secres-template" {
+  content = templatefile("${path.module}/templates/secrets.json.tpl", {
+    token_role = aws_instance.test-app.id
+    })
+  filename = "${path.module}/configs/secrets.json.tmp"
+}
+
 data "aws_ami" "ubuntu2404_vault" {
   most_recent      = true
   owners           = ["self"]
@@ -78,6 +85,9 @@ resource "terraform_data" "test-app" {
       "sudo cp -f /var/tmp/vault-configs/ca-cert.pem /opt/vault/tls/ca-cert.pem",
       "sudo cp -f /var/tmp/vault-configs/i-*.pem /opt/vault/tls/client_tls.crt",
       "sudo cp -f /var/tmp/vault-configs/i-*.key /opt/vault/tls/client_tls.key",
+      "sudo chown vault:vault /opt/vault/tls/ca-cert.pem",
+      "sudo chown vault:vault /opt/vault/tls/client_tls.crt",
+      "sudo chown vault:vault /opt/vault/tls/client_tls.key",
       "sudo cp -f /var/tmp/vault-configs/agent-config.hcl.tmp /etc/vault.d/agent-config.hcl",
     ]
   }

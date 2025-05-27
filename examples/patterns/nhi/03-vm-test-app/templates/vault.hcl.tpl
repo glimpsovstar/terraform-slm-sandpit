@@ -1,4 +1,4 @@
-pid_file = "./pidfile"
+# pid_file = "./pidfile"
 
 log_file = "/var/log/vault-agent.log"
 
@@ -34,7 +34,6 @@ api_proxy {
   enforce_consistency = "always"
 }
 
-
 # cache {
 # }
 
@@ -42,4 +41,12 @@ listener "tcp" {
    address     = "127.0.0.1:8200"
    tls_cert_file = "/opt/vault/tls/client_tls.crt"
    tls_key_file  = "/opt/vault/tls/client_tls.key"
+}
+
+template_config {
+}
+
+template {
+  source      = "/var/tmp/vault-configs/secrets.json.tmp"
+  destination = "/var/tmp/secrets.json"
 }
