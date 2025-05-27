@@ -5,7 +5,7 @@ locals {
 resource "local_file" "agent-config" {
   content = templatefile("${path.module}/templates/vault.hcl.tpl", {
     vault_address = var.vault_address
-    role = aws_instance.test-app.private_dns
+    role = aws_instance.test-app.id
     })
   filename = "${path.module}/configs/agent-config.hcl.tmp"
 }

@@ -5,7 +5,7 @@ module "vault-machine-id-onboarding" {
   machine_auth_mount_path = "cert"
   machine_auth_policy     = "trusted-machine"
   pki_role                = "trusted-machine"
-  common_name             = aws_instance.test-app.private_dns
+  common_name             = aws_instance.test-app.id
   team_name               = "retailxyz"
   machine_function        = "databasexyz"
 }
