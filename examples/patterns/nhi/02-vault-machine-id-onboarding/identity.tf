@@ -27,18 +27,9 @@ resource "vault_identity_group" "this" {
   ]
 }
 
-# create testing identity token resources
-resource "vault_identity_oidc_key" "machine-id" {
-  name      = var.common_name
-  allowed_client_ids = ["*"]
-  algorithm = "RS256"
-  verification_ttl = 7200
-  rotation_period = 7200
-}
-
 resource "vault_identity_oidc_role" "machine-id" {
   name = var.common_name
-  key  = vault_identity_oidc_key.machine-id.name
+  key  = "machine-id"
   template = "{\"spiffe_id\": ${local.spiffe_id} }"
   ttl = 60
 }

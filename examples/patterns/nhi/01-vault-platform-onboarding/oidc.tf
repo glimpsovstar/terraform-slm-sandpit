@@ -75,3 +75,12 @@ resource "vault_identity_oidc_role" "testing" {
   template = "{\"username\": {{identity.entity.name}}, \"contact\": { \"email\": {{identity.entity.metadata.email}} } }"
   ttl = 60
 }
+
+# create machine-id key
+resource "vault_identity_oidc_key" "machine-id" {
+  name      = "machine-id"
+  allowed_client_ids = ["*"]
+  algorithm = "RS256"
+  verification_ttl = 7200
+  rotation_period = 7200
+}
