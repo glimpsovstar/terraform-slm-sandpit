@@ -162,6 +162,66 @@ terraform state rm aws_vpc.deleted_vpc
 
 **Prevention**: Use `terraform destroy` instead of manual deletion where possible
 
+### 6. Orphaned Kubernetes Resources in Terraform State
+
+**Problem**: During cleanup testing, Terraform state contained references to Kubernetes resources that no longer existed after namespace deletion
+
+**When This Occurs**: This issue was encountered during **Stage 1 of the infrastructure destroy process** when attempting to clean up the Vault solution components using the documented cleanup procedure.
+
+**Symptoms**:
+```bash
+# Stage 1: Remove Vault and Kubernetes resources
+terraform destroy -target=module.solution-k8s-vault-ent -auto-approve
+```
+**Error Output**:
+```
+Error: Get "https://xyz.eks.region.amazonaws.com/api/v1/namespaces/vault/ingresses/vault": 
+the server could not find the requested resource
+```
+
+**Root Cause**: When Kubernetes namespace `vault` was manually deleted, all resources within it were removed, but Terraform state still tracked individual resources like ingress and services.
+
+**Investigation Process**:
+```bash
+# List all resources in Terraform state
+terraform state list
+
+# Identified orphaned resources:
+# module.solution-k8s-vault-ent[0].kubernetes_ingress_v1.vault
+# module.solution-k8s-vault-ent[0].kubernetes_service.vault_ui_nodeport
+
+# Attempted to check resource status
+kubectl get ingress vault -n vault
+# Error: No resources found in vault namespace
+```
+
+**Solution Steps**:
+```bash
+# Remove orphaned Kubernetes resources from Terraform state
+terraform state rm 'module.solution-k8s-vault-ent[0].kubernetes_ingress_v1.vault'
+terraform state rm 'module.solution-k8s-vault-ent[0].kubernetes_service.vault_ui_nodeport'
+
+# Verify state cleanup
+terraform state list | grep vault
+# Should return no results
+
+# Retry cleanup operation
+terraform destroy -target=module.solution-k8s-vault-ent -auto-approve
+# Success: Destroy complete! Resources: 0 destroyed.
+```
+
+**Key Learning**: 
+- Manual deletion of Kubernetes namespaces removes all contained resources
+- Terraform state must be cleaned up when resources are deleted outside of Terraform
+- Use `terraform state rm` to remove orphaned resource references before destroy operations
+- Always use `terraform destroy` for managed resources to maintain state consistency
+
+**Prevention Strategy**:
+1. Always use Terraform for resource lifecycle management
+2. If manual deletion is necessary, immediately clean up state with `terraform state rm`
+3. Use `terraform state list` to identify orphaned resources before cleanup operations
+4. Consider using `terraform refresh` to sync state with actual infrastructure before major operations
+
 ## Testing Strategies That Worked
 
 ### 1. Infrastructure Verification
