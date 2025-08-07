@@ -1,4 +1,3 @@
-
 # create minio oidc resources
 resource "vault_identity_oidc_assignment" "minio" {
   name       = "minio"
