@@ -17,3 +17,14 @@ output "cluster_oidc_issuer_url" {
   description = "eks cluster oidc issuer url"
   value       = module.eks.cluster_oidc_issuer_url
 }
+
+# Vault auto-unseal outputs
+output "vault_kms_role_arn" {
+  description = "IAM role ARN for Vault KMS access"
+  value       = aws_iam_role.vault_kms_role.arn
+}
+
+output "vault_kms_key_id" {
+  description = "KMS key ID for Vault auto-unseal"
+  value       = data.aws_kms_key.vault_unseal.key_id
+}

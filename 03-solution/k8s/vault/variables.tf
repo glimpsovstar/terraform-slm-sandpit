@@ -29,3 +29,19 @@ variable "route53_sandbox_prefix" {
   description = "aws route53 sandbox account prefix"
   type        = string
 }
+
+# Auto-unseal variables
+variable "kms_key_id" {
+  description = "AWS KMS key ID for Vault auto-unseal"
+  type        = string
+}
+
+variable "vault_kms_role_arn" {
+  description = "IAM role ARN for Vault KMS access"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWS region for KMS"
+  type        = string
+}

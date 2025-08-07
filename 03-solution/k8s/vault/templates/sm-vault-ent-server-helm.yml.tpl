@@ -14,6 +14,12 @@ server:
   logLevel: "debug"
   extraEnvironmentVars:
     VAULT_CACERT: /vault/userconfig/vault-ha-tls/vault.ca
+    AWS_REGION: "${aws_region}"
+  serviceAccount:
+    create: true
+    name: "vault"
+    annotations:
+      eks.amazonaws.com/role-arn: "${kms_role_arn}"
   volumes:
     - name: userconfig-vault-ha-tls
       secret:
@@ -48,6 +54,12 @@ server:
             leader_client_key_file = "/vault/userconfig/vault-ha-tls/vault.key"
             leader_ca_cert_file = "/vault/userconfig/vault-ha-tls/vault.ca"
           }
+        }
+
+        # AWS KMS Auto-unseal
+        seal "awskms" {
+          region     = "${aws_region}"
+          kms_key_id = "${kms_key_id}"
         }
 
         disable_mlock = true

@@ -20,6 +20,12 @@ variable "deploy_solution_k8s_vault" {
   default     = false
 }
 
+variable "vault_auto_unseal" {
+  description = "enable vault auto-unseal with AWS KMS"
+  type        = bool
+  default     = true
+}
+
 # amazon web services (aws) variables
 
 variable "aws_region" {

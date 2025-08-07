@@ -49,4 +49,9 @@ module "solution-k8s-vault-ent" {
   ent_license            = var.vault_ent_license
   helm_chart_version     = "0.30.0"
   route53_sandbox_prefix = var.aws_route53_sandbox_prefix
+  
+  # Auto-unseal configuration
+  kms_key_id         = module.platform-k8s-eks[0].vault_kms_key_id
+  vault_kms_role_arn = module.platform-k8s-eks[0].vault_kms_role_arn
+  aws_region         = var.aws_region
 }

@@ -26,6 +26,48 @@ data "aws_security_group" "vault" {
   }
 }
 
+# Get KMS key ARN from infrastructure module
+data "aws_kms_key" "vault_unseal" {
+  key_id = "alias/${var.deployment_id}-vault-unseal"
+}
+
+# IAM role for Vault service account (IRSA - IAM Roles for Service Accounts)
+data "aws_iam_policy_document" "vault_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(module.eks.cluster_oidc_issuer_url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:vault:vault"]
+    }
+
+    principals {
+      identifiers = [module.eks.oidc_provider_arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "vault_kms_role" {
+  name               = "${var.deployment_id}-vault-kms-role"
+  assume_role_policy = data.aws_iam_policy_document.vault_assume_role_policy.json
+
+  tags = {
+    Name        = "${var.deployment_id}-vault-kms-role"
+    Environment = var.deployment_id
+  }
+}
+
+# Attach the KMS policy to the role
+resource "aws_iam_role_policy_attachment" "vault_kms_policy" {
+  policy_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.deployment_id}-vault-kms-unseal"
+  role       = aws_iam_role.vault_kms_role.name
+}
+
+data "aws_caller_identity" "current" {}
+
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "~> 20.0"
