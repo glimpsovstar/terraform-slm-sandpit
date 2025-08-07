@@ -54,3 +54,8 @@ kubeconfig*
 
 # Ignore key files
 *.key
+
+# Ignore generated Let's Encrypt issuer files
+letsencrypt-prod-issuer.yaml
+letsencrypt-staging-issuer.yaml
+**/letsencrypt-*-issuer.yaml

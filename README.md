@@ -269,6 +269,8 @@ terraform destroy -target=module.infra-aws -auto-approve
 terraform destroy -auto-approve
 ```
 
+**Note**: Generated files like `letsencrypt-*-issuer.yaml` and TLS certificates are automatically excluded from version control via `.gitignore` as they contain environment-specific configurations.
+
 ## Production Considerations
 
 1. **Backup Strategy**: Implement automated Vault snapshot backups to S3
