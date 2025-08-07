@@ -31,6 +31,7 @@ server:
       config: |
         cluster_name = "vault-integrated-storage"
         ui = true
+        api_addr = "${api_addr}"
         listener "tcp" {
           tls_disable = 0
           address = "[::]:8200"

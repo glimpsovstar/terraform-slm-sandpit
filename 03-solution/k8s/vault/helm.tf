@@ -2,6 +2,7 @@ resource "local_file" "vault-ent-server-helm-values" {
   content = templatefile("${path.module}/templates/sm-vault-ent-server-helm.yml.tpl", {
     version  = var.vault_version
     replicas = var.replicas
+    api_addr = "https://vault.${data.aws_route53_zone.hashidemos.name}:8200"
     })
   filename = "${path.module}/sm-vault-ent-server-helm.yml.tmp"
 }
