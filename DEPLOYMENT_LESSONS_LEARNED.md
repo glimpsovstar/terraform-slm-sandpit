@@ -222,6 +222,66 @@ terraform destroy -target=module.solution-k8s-vault-ent -auto-approve
 3. Use `terraform state list` to identify orphaned resources before cleanup operations
 4. Consider using `terraform refresh` to sync state with actual infrastructure before major operations
 
+### 7. Final Cleanup Stage Data Source Errors
+
+**Problem**: During final cleanup stage after successful multi-stage destruction, `terraform destroy -auto-approve` failed due to data sources trying to reference deleted resources
+
+**When This Occurs**: This issue was encountered during **final cleanup** after successfully completing Stages 1-3 of the infrastructure destroy process.
+
+**Symptoms**:
+```bash
+terraform destroy -auto-approve
+```
+
+**Error Output**:
+```
+Error: no matching EC2 VPC found
+  with module.platform-k8s-eks[0].data.aws_vpc.this,
+  on 02-platform/k8s/aws/eks.tf line 1, in data "aws_vpc" "this":
+
+Error: no matching EC2 Security Group found
+  with module.platform-k8s-eks[0].data.aws_security_group.vault,
+
+Error: reading KMS Key (alias/djoo-5unb-vault-unseal): couldn't find resource
+  with module.platform-k8s-eks[0].data.aws_kms_key.vault_unseal,
+```
+
+**Root Cause**: Terraform was attempting to refresh data sources that referenced AWS resources which were already destroyed in previous stages, causing the final cleanup to fail.
+
+**Investigation Process**:
+```bash
+# Check what resources remained in state
+terraform state list
+# Output showed:
+# data.aws_eks_cluster.platform[0]
+# random_string.suffix
+```
+
+**Solution Steps**:
+```bash
+# Remove orphaned data source from Terraform state
+terraform state rm 'data.aws_eks_cluster.platform[0]'
+
+# Target only the remaining managed resource for cleanup
+terraform destroy -target=random_string.suffix -auto-approve
+
+# Verify complete cleanup
+terraform state list
+# Should return empty output
+```
+
+**Key Learning**:
+- Data sources can cause final cleanup failures when they reference resources destroyed in previous stages
+- Use `terraform state list` to identify what remains after staged cleanup
+- Remove orphaned data sources with `terraform state rm` before final cleanup
+- Target specific resources for destruction when data source conflicts occur
+
+**Prevention Strategy**:
+1. After completing staged destroy operations, check state with `terraform state list`
+2. Remove any orphaned data sources before attempting final cleanup
+3. Use targeted destroy commands (`terraform destroy -target=`) for remaining resources
+4. Consider restructuring data sources to be conditional or use lifecycle rules to prevent refresh during destroy
+
 ## Testing Strategies That Worked
 
 ### 1. Infrastructure Verification
