@@ -67,3 +67,5 @@ VAULT_CREDENTIALS.md
 letsencrypt-prod-issuer.yaml
 letsencrypt-staging-issuer.yaml
 **/letsencrypt-*-issuer.yaml
+# Vault initialization files (contain secrets)
+vault-init*.json
