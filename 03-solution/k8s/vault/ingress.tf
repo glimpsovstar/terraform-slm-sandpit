@@ -24,13 +24,15 @@ resource "kubernetes_ingress_v1" "vault" {
     dynamic "tls" {
       for_each = var.use_route53_dns ? [1] : []
       content {
-        hosts       = [local.vault_hostname]
+        hosts       = [local.route53_hostname]
         secret_name = "vault-tls-cert"
       }
     }
 
     rule {
-      host = local.vault_hostname
+      # When using Route53, specify the exact hostname
+      # When using LoadBalancer, leave host empty to accept any hostname
+      host = var.use_route53_dns ? local.vault_hostname : null
       http {
         path {
           path      = "/"

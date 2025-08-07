@@ -2,8 +2,8 @@
 locals {
   # Build hostnames conditionally based on DNS preference
   route53_hostname = "vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"
-  aws_lb_hostname = "vault-${var.deployment_id}.${try(data.kubernetes_service.nginx_ingress_always.status[0].load_balancer[0].ingress[0].hostname, "unknown")}"
-  vault_hostname = var.use_route53_dns ? local.route53_hostname : local.aws_lb_hostname
+  # For AWS LB mode, hostname will be determined after deployment
+  vault_hostname = var.use_route53_dns ? local.route53_hostname : "vault-${var.deployment_id}"
 }
 
 data "aws_route53_zone" "hashidemos" {
@@ -12,19 +12,9 @@ data "aws_route53_zone" "hashidemos" {
   private_zone = false
 }
 
-# Get the NGINX Ingress Controller LoadBalancer hostname
+# Get the NGINX Ingress Controller LoadBalancer hostname (only when using Route53)
 data "kubernetes_service" "nginx_ingress" {
   count = var.use_route53_dns ? 1 : 0
-  metadata {
-    name      = "ingress-nginx-controller"
-    namespace = "ingress-nginx"
-  }
-  
-  depends_on = [kubernetes_ingress_v1.vault]
-}
-
-# Get the NGINX Ingress Controller LoadBalancer hostname (always needed for hostname construction)
-data "kubernetes_service" "nginx_ingress_always" {
   metadata {
     name      = "ingress-nginx-controller"
     namespace = "ingress-nginx"
