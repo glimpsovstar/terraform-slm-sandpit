@@ -10,5 +10,5 @@ resource "aws_route53_record" "vault" {
   ttl     = 300
   records = [
     data.kubernetes_service.vault-ui.status.0.load_balancer.0.ingress.0.hostname
-]
+  ]
 }
