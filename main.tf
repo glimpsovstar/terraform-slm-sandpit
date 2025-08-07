@@ -30,6 +30,7 @@ module "platform-k8s-eks" {
   cluster_suffix          = "platform"
   worker_desired_capacity = 3
   worker_instance_types   = ["m7i.large"]
+  use_route53_dns         = var.use_route53_dns
 }
 
 # hashicorp vault enterprise server kubernetes deployment

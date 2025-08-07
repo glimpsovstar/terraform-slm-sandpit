@@ -10,20 +10,39 @@ resource "helm_release" "nginx_ingress" {
   timeout          = 300
   wait             = true
 
-  set {
-    name  = "controller.service.type"
-    value = "LoadBalancer"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"
-    value = "nlb"
-  }
-
-  set {
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-cross-zone-load-balancing-enabled"
-    value = "true"
-  }
+  values = [
+    yamlencode({
+      controller = {
+        service = {
+          type = "LoadBalancer"
+          annotations = {
+            "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb"
+            "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled" = "true"
+          }
+          ports = {
+            http = {
+              port       = 80
+              protocol   = "TCP"
+              targetPort = "http"
+            }
+            https = {
+              port       = 443
+              protocol   = "TCP"
+              targetPort = "https"
+            }
+            vault-direct = {
+              port       = 8200
+              protocol   = "TCP"
+              targetPort = 8200
+            }
+          }
+        }
+      }
+      tcp = {
+        "8200" = "vault/vault-ui:8200"
+      }
+    })
+  ]
 }
 
 # cert-manager Helm deployment for Let's Encrypt SSL certificates

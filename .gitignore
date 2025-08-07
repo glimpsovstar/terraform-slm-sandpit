@@ -32,6 +32,8 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+tfplan
+*.tfplan
 
 # Ignore CLI configuration files
 .terraformrc
@@ -48,6 +50,12 @@ kubeconfig*
 
 # Ignore license files
 *.hclic
+
+# Ignore Vault credentials and sensitive files
+vault_init_output.json
+VAULT_CREDENTIALS.md
+*vault_credentials*
+*vault_init*
 
 # Ignore temporary files
 *.tmp

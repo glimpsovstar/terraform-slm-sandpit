@@ -35,3 +35,9 @@ variable "worker_capacity_type" {
   type        = string
   default     = "ON_DEMAND"
 }
+
+variable "use_route53_dns" {
+  description = "Whether to use Route53 DNS for ingress. When false, port 8200 will be exposed directly"
+  type        = bool
+  default     = true
+}
