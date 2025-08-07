@@ -1,26 +1,36 @@
 # Vault Ingress with Let's Encrypt SSL
 
+# Vault Ingress with conditional Let's Encrypt SSL
+
 resource "kubernetes_ingress_v1" "vault" {
   metadata {
     name      = "vault-ingress"
     namespace = "vault"
-    annotations = {
-      "kubernetes.io/ingress.class"                         = "nginx"
-      "nginx.ingress.kubernetes.io/backend-protocol"        = "HTTPS"
-      "nginx.ingress.kubernetes.io/proxy-ssl-verify"        = "off"
-      "nginx.ingress.kubernetes.io/proxy-ssl-server-name"   = "on"
-      "cert-manager.io/cluster-issuer"                      = var.use_letsencrypt_prod ? "letsencrypt-prod" : "letsencrypt-staging"
-    }
+    annotations = merge(
+      {
+        "kubernetes.io/ingress.class"                         = "nginx"
+        "nginx.ingress.kubernetes.io/backend-protocol"        = "HTTPS"
+        "nginx.ingress.kubernetes.io/proxy-ssl-verify"        = "off"
+        "nginx.ingress.kubernetes.io/proxy-ssl-server-name"   = "on"
+      },
+      var.use_route53_dns ? {
+        "cert-manager.io/cluster-issuer" = var.use_letsencrypt_prod ? "letsencrypt-prod" : "letsencrypt-staging"
+      } : {}
+    )
   }
 
   spec {
-    tls {
-      hosts       = ["vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"]
-      secret_name = "vault-tls-cert"
+    # Only add TLS configuration when using Route53 DNS (for Let's Encrypt)
+    dynamic "tls" {
+      for_each = var.use_route53_dns ? [1] : []
+      content {
+        hosts       = [local.vault_hostname]
+        secret_name = "vault-tls-cert"
+      }
     }
 
     rule {
-      host = "vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"
+      host = local.vault_hostname
       http {
         path {
           path      = "/"

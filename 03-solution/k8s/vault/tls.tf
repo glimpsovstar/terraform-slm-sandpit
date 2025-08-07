@@ -9,7 +9,7 @@ resource "tls_self_signed_cert" "ca-cert" {
   is_ca_certificate = true
 
   subject {
-    common_name  = "ca.vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"
+    common_name  = "ca.${local.vault_hostname}"
     organization = "hashicorp"
   }
 
@@ -32,12 +32,12 @@ resource "tls_cert_request" "server-cert" {
   private_key_pem = tls_private_key.server-key.private_key_pem
 
   subject {
-    common_name  = "*.vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"
+    common_name  = "*.${local.vault_hostname}"
     organization = "hashicorp"
   }
 
   dns_names = [
-    "vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io",
+    local.vault_hostname,
     "vault",
     "vault-active",
     "vault-internal",

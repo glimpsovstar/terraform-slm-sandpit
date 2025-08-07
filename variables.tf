@@ -39,6 +39,12 @@ variable "aws_route53_sandbox_prefix" {
   type        = string
 }
 
+variable "use_route53_dns" {
+  description = "Use Route53 managed DNS (true) or AWS LoadBalancer hostname (false)"
+  type        = bool
+  default     = true
+}
+
 variable "aws_vpc_cidr" {
   description = "aws vpc cidr"
   type        = string

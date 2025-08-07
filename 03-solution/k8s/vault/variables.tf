@@ -30,6 +30,12 @@ variable "route53_sandbox_prefix" {
   type        = string
 }
 
+variable "use_route53_dns" {
+  description = "Use Route53 managed DNS (true) or AWS LoadBalancer hostname (false)"
+  type        = bool
+  default     = true
+}
+
 # Auto-unseal variables
 variable "kms_key_id" {
   description = "AWS KMS key ID for Vault auto-unseal"
