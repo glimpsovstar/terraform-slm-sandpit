@@ -21,7 +21,7 @@ output "aws_bastion_public_fqdn" {
 
 output "vault_ui_fqdn" {
   description = "vault fqdn"
-  value       = var.deploy_solution_k8s_vault == true ? "https://vault.tphan.sbx.hashidemos.io:8200" : null
+  value       = var.deploy_solution_k8s_vault == true ? "https://vault.${var.aws_route53_sandbox_prefix}.sbx.hashidemos.io:8200" : null
 }
 
 output "vault_ca_cert_pem" {
