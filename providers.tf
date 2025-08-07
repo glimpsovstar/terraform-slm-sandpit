@@ -22,14 +22,23 @@ terraform {
   }
 }
 
+locals {
+  cluster_name = "${local.deployment_id}-platform"
+}
+
 provider "aws" {
   region = var.aws_region
 }
 
+# Data sources to connect to the EKS cluster - only when cluster exists
 data "aws_eks_cluster" "platform" {
   count = var.deploy_platform_k8s_eks ? 1 : 0
+  name  = local.cluster_name
+}
 
-  name = var.deploy_platform_k8s_eks == true ? module.platform-k8s-eks[0].cluster_name : null 
+data "aws_eks_cluster_auth" "platform" {
+  count = var.deploy_platform_k8s_eks ? 1 : 0
+  name  = local.cluster_name
 }
 
 # Static provider configuration that works across all steps
@@ -51,18 +60,5 @@ provider "helm" {
     host                   = length(data.aws_eks_cluster.platform) > 0 ? data.aws_eks_cluster.platform[0].endpoint : null
     cluster_ca_certificate = length(data.aws_eks_cluster.platform) > 0 ? base64decode(data.aws_eks_cluster.platform[0].certificate_authority[0].data) : null
     token                  = length(data.aws_eks_cluster_auth.platform) > 0 ? data.aws_eks_cluster_auth.platform[0].token : null
-  }
-}
-
-provider "helm" {
-  alias = "platform-eks"
-  kubernetes {
-    host                   = var.deploy_platform_k8s_eks == true ? data.aws_eks_cluster.platform[0].endpoint : null
-    cluster_ca_certificate = var.deploy_platform_k8s_eks == true ? base64decode(data.aws_eks_cluster.platform[0].certificate_authority.0.data) : null
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", var.deploy_platform_k8s_eks == true ? data.aws_eks_cluster.platform[0].name : ""]
-      command     = "aws"
-    }
   }
 }
