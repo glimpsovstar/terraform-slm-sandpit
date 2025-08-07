@@ -66,4 +66,4 @@ server:
         service_registration "kubernetes" {}
 ui:
   enabled: true
-  serviceType: "LoadBalancer"
+  serviceType: "ClusterIP"

@@ -45,3 +45,9 @@ variable "aws_region" {
   description = "AWS region for KMS"
   type        = string
 }
+
+variable "use_letsencrypt_prod" {
+  description = "Use Let's Encrypt production (true) or staging (false)"
+  type        = bool
+  default     = false
+}

@@ -45,6 +45,11 @@ variable "aws_vpc_cidr" {
   default     = "10.200.0.0/16"
 }
 
+variable "letsencrypt_email" {
+  description = "email address for Let's Encrypt certificate registration"
+  type        = string
+}
+
 # hashicorp vault enterprise server variables
 
 variable "vault_ent_license" {

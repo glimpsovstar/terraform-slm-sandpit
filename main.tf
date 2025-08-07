@@ -54,4 +54,7 @@ module "solution-k8s-vault-ent" {
   kms_key_id         = module.platform-k8s-eks[0].vault_kms_key_id
   vault_kms_role_arn = module.platform-k8s-eks[0].vault_kms_role_arn
   aws_region         = var.aws_region
+  
+  # Let's Encrypt configuration - now using production
+  use_letsencrypt_prod = true
 }

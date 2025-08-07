@@ -1,6 +1,11 @@
 output "vault_ui_fqdn" {
-  description = "vault load balancer fqdn"
-  value       = data.kubernetes_service.vault-ui.status.0.load_balancer.0.ingress.0.hostname
+  description = "vault ingress FQDN"
+  value       = "https://vault.${var.route53_sandbox_prefix}.sbx.hashidemos.io"
+}
+
+output "vault_ingress_loadbalancer_fqdn" {
+  description = "NGINX ingress controller load balancer FQDN"
+  value       = data.kubernetes_service.nginx_ingress.status.0.load_balancer.0.ingress.0.hostname
 }
 
 output "vault_ca_cert_pem" {
